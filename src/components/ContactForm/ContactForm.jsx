@@ -2,6 +2,9 @@ import { useId } from 'react';
 import css from './ContactForm.module.css';
 import { Field, Form, Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact } from '../../redux/contactsSlice';
+import { showWarning } from '../../js/message';
 
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -17,12 +20,20 @@ const ContactsSchema = Yup.object().shape({
     .required('Required'),
 });
 
-export const ContactForm = ({ onSubmit }) => {
+export const ContactForm = () => {
   const nameId = useId();
   const numberId = useId();
-
+  const dispatch = useDispatch();
+  const contacts = useSelector(state => state.contacts.items);
   const submitForm = (values, actions) => {
-    onSubmit(values);
+    if (
+      contacts.find(
+        contact => contact.name.toLowerCase() === values.name.toLowerCase()
+      )
+    ) {
+      return showWarning(values.name);
+    }
+    dispatch(addContact(values));
     actions.resetForm();
   };
   return (
@@ -36,7 +47,13 @@ export const ContactForm = ({ onSubmit }) => {
           <label className={css.label} htmlFor={nameId}>
             name
           </label>
-          <Field type="text" name="name" id={nameId} className={css.input} />
+          <Field
+            type="text"
+            name="name"
+            id={nameId}
+            className={css.input}
+            autoComplete="off"
+          />
           <span className={css.error}>
             <ErrorMessage name="name" as="span" />
           </span>
@@ -51,6 +68,7 @@ export const ContactForm = ({ onSubmit }) => {
             name="number"
             id={numberId}
             className={css.input}
+            autoComplete="off"
           />
           <span className={css.error}>
             <ErrorMessage name="number" as="span" />

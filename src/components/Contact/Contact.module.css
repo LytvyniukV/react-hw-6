@@ -6,6 +6,11 @@
 .text {
   font-size: 22px;
   color: black;
+  text-transform: capitalize;
+}
+.number{
+  font-size: 22px;
+  color: black;
 }
 .button {
   width: 100px;
