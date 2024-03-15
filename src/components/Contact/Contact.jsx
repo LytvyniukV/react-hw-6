@@ -15,6 +15,7 @@ export const Contact = ({ id, name, number }) => {
           <FaPhone className={css.icon} size={15} /> {number}
         </p>
       </div>
+
       <button
         className={css.button}
         type="button"

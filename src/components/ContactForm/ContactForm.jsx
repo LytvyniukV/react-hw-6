@@ -3,7 +3,7 @@ import css from './ContactForm.module.css';
 import { Field, Form, Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from '../../redux/contactsSlice';
+import { addContact, selectContacts } from '../../redux/contactsSlice';
 import { showWarning } from '../../js/message';
 
 const phoneRegExp =
@@ -24,7 +24,7 @@ export const ContactForm = () => {
   const nameId = useId();
   const numberId = useId();
   const dispatch = useDispatch();
-  const contacts = useSelector(state => state.contacts.items);
+  const contacts = useSelector(selectContacts);
   const submitForm = (values, actions) => {
     if (
       contacts.find(
